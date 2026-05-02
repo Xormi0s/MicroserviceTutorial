@@ -2,6 +2,7 @@ package com.xormios.device_service.service;
 
 import com.xormios.device_service.dto.DeviceDto;
 import com.xormios.device_service.entity.Device;
+import com.xormios.device_service.exception.DeviceNotFoundException;
 import com.xormios.device_service.repository.DeviceRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ public class DeviceService {
     }
 
     public DeviceDto getDeviceById(Long id) {
-        Device device = deviceRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Device not found with id " + id));
+        Device device = deviceRepository.findById(id).orElseThrow(() -> new DeviceNotFoundException("Device not found with id " + id));
         return mapToDto(device);
     }
 
@@ -32,7 +33,7 @@ public class DeviceService {
     }
 
     public DeviceDto updateDeviceById(Long id, DeviceDto deviceDto) {
-        Device existingDevice = deviceRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Device not found with id " + id));
+        Device existingDevice = deviceRepository.findById(id).orElseThrow(() -> new DeviceNotFoundException("Device not found with id " + id));
 
         existingDevice.setName(deviceDto.getName());
         existingDevice.setLocation(deviceDto.getLocation());
@@ -44,7 +45,7 @@ public class DeviceService {
 
     public void deleteDeviceById(Long id) {
         if(!deviceRepository.existsById(id)) {
-            throw new IllegalArgumentException("Device not found with id " + id);
+            throw new DeviceNotFoundException("Device not found with id " + id);
         }
         deviceRepository.deleteById(id);
     }
