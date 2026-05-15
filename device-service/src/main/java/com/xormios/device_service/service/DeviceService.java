@@ -6,6 +6,9 @@ import com.xormios.device_service.exception.DeviceNotFoundException;
 import com.xormios.device_service.repository.DeviceRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class DeviceService {
 
@@ -59,5 +62,11 @@ public class DeviceService {
                 .userId(device.getUserId())
                 .build();
         return deviceDto;
+    }
+
+    public List<DeviceDto> getAllDevicesByUserId(Long userId) {
+        List<Device> devices = deviceRepository.findAllByUserId(userId);
+
+        return devices.stream().map(this::mapToDto).toList();
     }
 }
